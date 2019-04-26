@@ -32,12 +32,29 @@ import java.util.List;
 @RestController
 @RequestMapping("/car_order")
 public class CarOrderController {
-    private static final String USER_NAME = "soa_p";
-    private static final String PASS_WORD = "000000";
-    private static final String namespaceURI = "http://xmlns.oracle.com/apps/cux/soaprovider/plsql/cux_car_manage_sys_pkg/";
 
-//    @Autowired
-//    private CUXCARMANAGESYSPKGPortType soap;
+    @Autowired
+    private CUXCARMANAGESYSPKGPortType soap;
+
+
+    private SOAHeader getSOAHeader() {
+        SOAHeader soaHeader = new SOAHeader();
+
+        String Responsibility = "CUX_SOA_ACCESS_RESP";
+        String RespApplication = "CUX";
+        String SecurityGroup = "STANDARD";
+        String NLSLanguage = "AMERICAN";
+        String Org_Id = "110";
+        soaHeader.setNLSLanguage(NLSLanguage);
+        soaHeader.setOrgId(Org_Id);
+        soaHeader.setRespApplication(RespApplication);
+        soaHeader.setSecurityGroup(SecurityGroup);
+        soaHeader.setResponsibility(Responsibility);
+
+        return soaHeader;
+    }
+
+
 
     /**
      * 192.168.118.216:8088/car_order/list
@@ -83,37 +100,22 @@ public class CarOrderController {
         inputParameters.setPNPAGEROWS(objFac.createInputParametersPNPAGEROWS(PN_PAGE_ROWS));
 
 
-        String localPart = "CUX_CAR_MANAGE_SYS_PKG_Port";
-//        QName name = new QName("http://service.demo.example.com/", "StudentServiceImplPort");
-        //方式二：通过wsimport生成客户端代码
-        CUXCARMANAGESYSPKGService impl = new CUXCARMANAGESYSPKGService();
-        impl.setHandlerResolver(new HandlerResolver() {
-            @Override
-            public List<Handler> getHandlerChain(PortInfo portInfo) {
-                List<Handler> handlerList = new ArrayList<Handler>();
-                handlerList.add(new CarClientHandler(namespaceURI, localPart, USER_NAME, PASS_WORD));
-                return handlerList;
-            }
-        });
+//        String localPart = "CUX_CAR_MANAGE_SYS_PKG_Port";
+////        QName name = new QName("http://service.demo.example.com/", "StudentServiceImplPort");
+//        //方式二：通过wsimport生成客户端代码
+//        CUXCARMANAGESYSPKGService impl = new CUXCARMANAGESYSPKGService();
+//        impl.setHandlerResolver(new HandlerResolver() {
+//            @Override
+//            public List<Handler> getHandlerChain(PortInfo portInfo) {
+//                List<Handler> handlerList = new ArrayList<Handler>();
+//                handlerList.add(new CarClientHandler(namespaceURI, localPart, USER_NAME, PASS_WORD));
+//                return handlerList;
+//            }
+//        });
         try {
 
 
-            SOAHeader soaHeader = new SOAHeader();
-
-            String Responsibility = "CUX_SOA_ACCESS_RESP";
-            String RespApplication = "CUX";
-            String SecurityGroup = "STANDARD";
-            String NLSLanguage = "AMERICAN";
-            String Org_Id = "110";
-            soaHeader.setNLSLanguage(NLSLanguage);
-            soaHeader.setOrgId(Org_Id);
-            soaHeader.setRespApplication(RespApplication);
-            soaHeader.setSecurityGroup(SecurityGroup);
-            soaHeader.setResponsibility(Responsibility);
-
-
-            CUXCARMANAGESYSPKGPortType layoutService = impl.getCUXCARMANAGESYSPKGPort();
-            com.oracle.xmlns.apps.cux.soaprovider.plsql.cux_car_manage_sys_pkg.get_car_order_list.OutputParameters result_1 = layoutService.getCARORDERLIST(soaHeader, inputParameters);
+            com.oracle.xmlns.apps.cux.soaprovider.plsql.cux_car_manage_sys_pkg.get_car_order_list.OutputParameters result_1 = soap.getCARORDERLIST(getSOAHeader(), inputParameters);
 
             System.out.println("result_1  " + result_1.toString());
             System.out.println("pnpagecount " + result_1.getPNPAGECOUNT().getValue());

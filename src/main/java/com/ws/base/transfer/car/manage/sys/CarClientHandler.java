@@ -53,8 +53,10 @@ public class CarClientHandler implements SOAPHandler<SOAPMessageContext> {
                 passwdElm.setAttribute("type",
                         "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText");
 
-                userNameElm.addTextNode("soa_p");
-                passwdElm.addTextNode("000000");
+//                userNameElm.addTextNode("soa_p");
+//                passwdElm.addTextNode("000000");
+                userNameElm.addTextNode(username);
+                passwdElm.addTextNode(password);
 
                 userNameTokenElm.addChildElement(userNameElm);
                 userNameTokenElm.addChildElement(passwdElm);
