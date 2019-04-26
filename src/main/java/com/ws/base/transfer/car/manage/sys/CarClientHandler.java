@@ -1,4 +1,4 @@
-package com.ws.base.transfer.cartest;
+package com.ws.base.transfer.car.manage.sys;
 
 
 import javax.xml.namespace.QName;
@@ -59,7 +59,8 @@ public class CarClientHandler implements SOAPHandler<SOAPMessageContext> {
                 userNameTokenElm.addChildElement(userNameElm);
                 userNameTokenElm.addChildElement(passwdElm);
                 wsSecHeaderElm.addChildElement(userNameTokenElm);
-                header.setParentElement(wsSecHeaderElm);
+
+                hdr.addChildElement(wsSecHeaderElm);
                 header.setMustUnderstand(true);
                 msg.saveChanges();
 
